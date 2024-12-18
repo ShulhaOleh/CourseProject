@@ -12,6 +12,37 @@ namespace Hospital
             "User ID=root;" +
             "Password=Oleh_Shulha;";
 
+        public MySqlConnection GetConnection()
+        {
+            return new MySqlConnection(connectionString);
+        }
+
+        public MySqlParameter CreateParameter(string parameterName, object value)
+        {
+            return new MySqlParameter(parameterName, value ?? DBNull.Value);
+        }
+
+        public DataTable ExecuteQuery(string query, params MySqlParameter[] parameters)
+        {
+            DataTable dataTable = new DataTable();
+
+            using (var connection = GetConnection())
+            {
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    if (parameters != null)
+                        command.Parameters.AddRange(parameters);
+
+                    using (var adapter = new MySqlDataAdapter(command))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+
+            return dataTable;
+        }
+
         public DataTable GetPatientsData()
         {
             DataTable dt = new DataTable();
@@ -131,8 +162,6 @@ namespace Hospital
 
             return doctor;
         }
-
-
 
 
     }

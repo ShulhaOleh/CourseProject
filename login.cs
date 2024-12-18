@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,11 +24,9 @@ namespace Hospital
 
             if (chkRememberMe.Checked)
             {
-                // Завантажуємо збережений логін
                 if (!string.IsNullOrEmpty(Settings.Default.SavedUsername))
                     txtLogin.Text = Settings.Default.SavedUsername;
 
-                // Завантажуємо збережений пароль, якщо він розшифровується коректно
                 if (!string.IsNullOrEmpty(Settings.Default.SavedPassword))
                 {
                     string decryptedPassword = DecryptPassword(Settings.Default.SavedPassword);
@@ -40,7 +37,6 @@ namespace Hospital
                 }
             }
 
-            // Встановлення плейсхолдерів ТІЛЬКИ для порожніх полів
             if (string.IsNullOrWhiteSpace(txtLogin.Text))
                 Placeholder.SetPlaceholder(txtLogin, "Введіть логін...");
 

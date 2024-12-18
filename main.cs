@@ -36,7 +36,7 @@ namespace Hospital
 
         private void btnAppointmentSearch_Click(object sender, EventArgs e)
         {
-            ShowControlInPanel(new AppointmentSearchControl());
+            ShowControlInPanel(new AppointmentSearchControl(loggedInDoctor));
         }
 
         private void btnMedicalCard_Click(object sender, EventArgs e)

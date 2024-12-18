@@ -69,7 +69,7 @@ namespace Hospital
             this.btnMedicalCard.Name = "btnMedicalCard";
             this.btnMedicalCard.Size = new System.Drawing.Size(160, 40);
             this.btnMedicalCard.TabIndex = 3;
-            this.btnMedicalCard.Text = "Амбулаторна картка";
+            this.btnMedicalCard.Text = "Амбулаторні картки";
             this.btnMedicalCard.UseVisualStyleBackColor = false;
             this.btnMedicalCard.Click += new System.EventHandler(this.btnMedicalCard_Click);
             // 
@@ -97,7 +97,7 @@ namespace Hospital
             this.btnPatientSearch.Name = "btnPatientSearch";
             this.btnPatientSearch.Size = new System.Drawing.Size(160, 40);
             this.btnPatientSearch.TabIndex = 1;
-            this.btnPatientSearch.Text = "Пошук пацієнта";
+            this.btnPatientSearch.Text = "Каталог пацієнта";
             this.btnPatientSearch.UseVisualStyleBackColor = false;
             this.btnPatientSearch.Click += new System.EventHandler(this.btnPatientSearch_Click);
             // 
@@ -129,7 +129,7 @@ namespace Hospital
             // 
             // btnLogout
             // 
-            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLogout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnLogout.FlatAppearance.BorderSize = 0;
@@ -145,7 +145,7 @@ namespace Hospital
             // 
             // btnExit
             // 
-            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.btnExit.FlatAppearance.BorderSize = 0;
