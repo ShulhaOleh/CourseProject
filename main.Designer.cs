@@ -183,6 +183,8 @@ namespace Hospital
             this.pnlExitContainer.PerformLayout();
             this.ResumeLayout(false);
 
+
+
         }
 
         private System.Windows.Forms.Panel pnlContent;

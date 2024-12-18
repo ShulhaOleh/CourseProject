@@ -1,6 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 
 namespace Hospital
 {
@@ -26,22 +28,57 @@ namespace Hospital
         {
             DataTable dataTable = new DataTable();
 
-            using (var connection = GetConnection())
+            try
             {
-                using (var command = new MySqlCommand(query, connection))
+                using (var connection = GetConnection())
                 {
-                    if (parameters != null)
-                        command.Parameters.AddRange(parameters);
-
-                    using (var adapter = new MySqlDataAdapter(command))
+                    connection.Open();
+                    using (var command = new MySqlCommand(query, connection))
                     {
-                        adapter.Fill(dataTable);
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+
+                        using (var adapter = new MySqlDataAdapter(command))
+                        {
+                            adapter.Fill(dataTable);
+                        }
                     }
                 }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"Помилка виконання SQL-запиту: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return dataTable;
         }
+        public int ExecuteNonQuery(string query, params MySqlParameter[] parameters)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+                        return command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show($"SQL-помилка: {ex.Message}", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return -1;
+            }
+        }
+
+
 
         public DataTable GetPatientsData()
         {
@@ -162,6 +199,187 @@ namespace Hospital
 
             return doctor;
         }
+
+        public DataTable GetMedicalRecordsByPatientID(int patientID)
+        {
+            string query = @"
+            SELECT 
+                PatientID, 
+                HealthStatus AS 'Стан здоров''я', 
+                Notes AS 'Примітки' 
+            FROM MedicalRecords 
+            WHERE PatientID = @PatientID";
+
+            var parameters = new[] { CreateParameter("@PatientID", patientID) };
+            return ExecuteQuery(query, parameters);
+        }
+
+
+
+        public DataTable GetMedicalRecordsByAmbulatoryCardID(int ambulatoryCardID)
+        {
+            string query = @"
+            SELECT 
+                AmbulatoryCardID AS 'ID картки',
+                PatientID AS 'ID пацієнта', 
+                EntryDate AS 'Дата запису'
+            FROM AmbulatoryCards
+            WHERE AmbulatoryCardID = @AmbulatoryCardID";
+
+            var parameters = new[] { CreateParameter("@AmbulatoryCardID", ambulatoryCardID) };
+            return ExecuteQuery(query, parameters);
+        }
+
+
+
+        public DataTable ExecuteSelectQuery(string query, Dictionary<string, object> parameters = null)
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        if (parameters != null)
+                        {
+                            foreach (var param in parameters)
+                            {
+                                command.Parameters.AddWithValue(param.Key, param.Value);
+                            }
+                        }
+
+                        using (var adapter = new MySqlDataAdapter(command))
+                        {
+                            adapter.Fill(dataTable);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Помилка виконання SQL-запиту: " + ex.Message, "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return dataTable;
+        }
+
+        public DataTable GetAllAmbulatoryCards()
+        {
+            string query = @"
+        SELECT 
+            AmbulatoryCardID AS 'ID картки', 
+            PatientID AS 'ID пацієнта', 
+            RecordID AS 'ID запису', 
+            EntryDate AS 'Дата запису' 
+        FROM AmbulatoryCards";
+            return ExecuteQuery(query);
+        }
+
+        public DataTable SearchAmbulatoryCards(string keyword)
+        {
+            string query = @"
+            SELECT 
+                AmbulatoryCardID AS 'ID картки', 
+                PatientID AS 'ID пацієнта', 
+                RecordID AS 'ID запису', 
+                EntryDate AS 'Дата запису' 
+            FROM AmbulatoryCards 
+            WHERE PatientID LIKE @keyword";
+            var parameters = new[] { CreateParameter("@keyword", "%" + keyword + "%") };
+            return ExecuteQuery(query, parameters);
+        }
+
+        public void AddMedicalRecord(int patientID, string healthStatus, string notes)
+        {
+            string query = "INSERT INTO MedicalRecords (PatientID, HealthStatus, Notes) VALUES (@PatientID, @HealthStatus, @Notes)";
+            var parameters = new[]
+            {
+                CreateParameter("@PatientID", patientID),
+                CreateParameter("@HealthStatus", healthStatus),
+                CreateParameter("@Notes", notes)
+            };
+            ExecuteQuery(query, parameters);
+        }
+        public void UpdateMedicalRecord(int recordID, string healthStatus, string notes)
+        {
+            string query = "UPDATE MedicalRecords SET HealthStatus = @HealthStatus, Notes = @Notes WHERE RecordID = @RecordID";
+            var parameters = new[]
+            {
+                CreateParameter("@HealthStatus", healthStatus),
+                CreateParameter("@Notes", notes),
+                CreateParameter("@RecordID", recordID)
+            };
+            ExecuteQuery(query, parameters);
+        }
+
+        public void DeleteMedicalRecord(int recordID)
+        {
+            string query = "DELETE FROM MedicalRecords WHERE RecordID = @RecordID";
+            var parameters = new[] { CreateParameter("@RecordID", recordID) };
+            ExecuteQuery(query, parameters);
+        }
+
+        public DataTable GetMedicalRecords(string search)
+        {
+            string query = "SELECT * FROM MedicalRecords";
+            if (!string.IsNullOrEmpty(search))
+            {
+                query += " WHERE HealthStatus LIKE @search OR Notes LIKE @search";
+            }
+
+            // Створюємо масив параметрів MySqlParameter[]
+            var parameters = new MySqlParameter[]
+            {
+        new MySqlParameter("@search", $"%{search}%")
+            };
+
+            return ExecuteQuery(query, parameters);
+        }
+
+        public DataTable GetAllMedicalRecords()
+        {
+            string query = "SELECT * FROM MedicalRecords";
+            return ExecuteQuery(query);
+        }
+
+        public DataTable SearchMedicalCards(string keyword)
+        {
+            string query = @"
+            SELECT 
+                p.PatientID AS 'ID пацієнта',
+                CONCAT(p.LastName, ' ', p.FirstName) AS 'ФІ пацієнта',
+                a.EntryDate AS 'Дата запису',
+                m.HealthStatus AS 'Статус здоров\'я',
+                m.Notes AS 'Примітка'
+            FROM MedicalRecords m
+            INNER JOIN AmbulatoryCards a ON m.AmbulatoryCardID = a.AmbulatoryCardID
+            INNER JOIN Patients p ON a.PatientID = p.PatientID
+            WHERE p.LastName LIKE @search OR p.FirstName LIKE @search 
+            OR m.HealthStatus LIKE @search OR m.Notes LIKE @search";
+            var parameters = new MySqlParameter[]
+            {
+        new MySqlParameter("@search", $"%{keyword}%")
+            };
+            return ExecuteQuery(query, parameters);
+        }
+
+        public DataTable GetAllMedicalCards()
+        {
+            string query = @"
+            SELECT 
+                p.PatientID AS 'ID пацієнта',
+                CONCAT(p.LastName, ' ', p.FirstName) AS 'ФІ пацієнта',
+                a.EntryDate AS 'Дата запису',
+                m.HealthStatus AS 'Статус здоров\'я',
+                m.Notes AS 'Примітка'
+            FROM MedicalRecords m
+            INNER JOIN AmbulatoryCards a ON m.AmbulatoryCardID = a.AmbulatoryCardID
+            INNER JOIN Patients p ON a.PatientID = p.PatientID";
+            return ExecuteQuery(query);
+        }
+       
+
 
 
     }

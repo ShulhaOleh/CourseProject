@@ -6,12 +6,17 @@ namespace Hospital
     public partial class frmMain : Form
     {
         private Doctor loggedInDoctor;
+        private PatientSearchControl patientSearchControl;
 
-        public frmMain(Doctor doctor)
+
+        public frmMain(Doctor doctor )
         {
             InitializeComponent();
+            patientSearchControl = new PatientSearchControl();
+            ShowControlInPanel(patientSearchControl);
             this.loggedInDoctor = doctor;
         }
+
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -29,6 +34,7 @@ namespace Hospital
             pnlContent.Controls.Add(control);
         }
 
+
         private void btnPatientSearch_Click(object sender, EventArgs e)
         {
             ShowControlInPanel(new PatientSearchControl());
@@ -36,8 +42,10 @@ namespace Hospital
 
         private void btnAppointmentSearch_Click(object sender, EventArgs e)
         {
-            ShowControlInPanel(new AppointmentSearchControl(loggedInDoctor));
+            AppointmentSearchControl appointmentSearchControl = new AppointmentSearchControl(loggedInDoctor);
+            ShowControlInPanel(appointmentSearchControl);
         }
+
 
         private void btnMedicalCard_Click(object sender, EventArgs e)
         {

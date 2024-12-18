@@ -6,6 +6,8 @@ namespace Hospital
     public partial class PatientSearchControl : UserControl
     {
         private DatabaseHelper dbHelper;
+        private int selectedPatientID;
+
 
         public PatientSearchControl()
         {
@@ -54,5 +56,7 @@ namespace Hospital
             var patients = dbHelper.SearchPatients(keyword);
             dgvPatients.DataSource = patients;
         }
+
+
     }
 }

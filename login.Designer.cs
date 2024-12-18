@@ -59,7 +59,7 @@
             // btnLogin
             // 
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.btnLogin.Location = new System.Drawing.Point(120, 180);
+            this.btnLogin.Location = new System.Drawing.Point(142, 180);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(115, 40);
             this.btnLogin.TabIndex = 2;
