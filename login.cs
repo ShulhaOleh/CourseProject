@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -24,15 +25,29 @@ namespace Hospital
 
             if (chkRememberMe.Checked)
             {
-                txtLogin.Text = Settings.Default.SavedUsername;
-                txtPassword.Text = DecryptPassword(Settings.Default.SavedPassword);
+                // Завантажуємо збережений логін
+                if (!string.IsNullOrEmpty(Settings.Default.SavedUsername))
+                    txtLogin.Text = Settings.Default.SavedUsername;
+
+                // Завантажуємо збережений пароль, якщо він розшифровується коректно
+                if (!string.IsNullOrEmpty(Settings.Default.SavedPassword))
+                {
+                    string decryptedPassword = DecryptPassword(Settings.Default.SavedPassword);
+                    if (!string.IsNullOrEmpty(decryptedPassword))
+                    {
+                        txtPassword.Text = decryptedPassword;
+                    }
+                }
             }
-            else
-            {
-                txtLogin.Text = string.Empty;
-                txtPassword.Text = string.Empty;
-            }
+
+            // Встановлення плейсхолдерів ТІЛЬКИ для порожніх полів
+            if (string.IsNullOrWhiteSpace(txtLogin.Text))
+                Placeholder.SetPlaceholder(txtLogin, "Введіть логін...");
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+                Placeholder.SetPlaceholder(txtPassword, "Введіть пароль...");
         }
+
 
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -125,6 +140,11 @@ namespace Hospital
                 return string.Empty;
             }
         }
+
+        private void frmLogin_Load(object sender, EventArgs e)
+        {
+            txtLogin.TabStop = false;
+            txtPassword.TabStop = false;
+        }
     }
 }
-

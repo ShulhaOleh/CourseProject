@@ -57,7 +57,6 @@ namespace Hospital
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(1464, 30);
             this.txtSearch.TabIndex = 1;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // dgvPatients
             // 

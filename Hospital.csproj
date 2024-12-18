@@ -133,6 +133,7 @@
     <Compile Include="PatientSearchControl.Designer.cs">
       <DependentUpon>PatientSearchControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Placeholder.cs" />
     <Compile Include="ProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
