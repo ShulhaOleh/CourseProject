@@ -15,7 +15,7 @@ namespace Hospital
 
         private void DisplayDoctorInfo()
         {
-            lblDoctorInfo.Text = $"Фамілія: {loggedInDoctor.LastName}\n" +
+            lblDoctorInfo.Text = $"Прізвище: {loggedInDoctor.LastName}\n" +
                                  $"Ім'я: {loggedInDoctor.FirstName}\n" +
                                  $"Вік: {CalculateAge(loggedInDoctor.DateOfBirth)}\n" +
                                  $"Спеціальність: {loggedInDoctor.Specialty}";

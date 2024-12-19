@@ -16,7 +16,7 @@ namespace Hospital
 
             LoadAllPatients();
 
-            Placeholder.SetPlaceholder(txtSearch, "Введіть фамілію або ім'я...");
+            Placeholder.SetPlaceholder(txtSearch, "Введіть прізвище або ім'я...");
 
             txtSearch.TextChanged += txtSearch_TextChanged;
             txtSearch.Leave += txtSearch_Leave;
@@ -41,7 +41,7 @@ namespace Hospital
 
         private void txtSearch_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSearch.Text) || txtSearch.Text == "Введіть фамілію або ім'я...")
+            if (string.IsNullOrWhiteSpace(txtSearch.Text) || txtSearch.Text == "Введіть прізвище або ім'я...")
             {
                 LoadAllPatients();
             }

@@ -92,7 +92,7 @@ namespace Hospital
         {
             ShowControlInPanel(new ProfileControl(loggedInDoctor));
         }
-
+        
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!Properties.Settings.Default.RememberMe)

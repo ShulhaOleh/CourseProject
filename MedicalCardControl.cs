@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Hospital 
@@ -15,7 +14,7 @@ namespace Hospital
             InitializeComponent();
             dbHelper = new DatabaseHelper();
 
-            Placeholder.SetPlaceholder(txtSearch, "Введіть фамілію або ім'я...");
+            Placeholder.SetPlaceholder(txtSearch, "Введіть прізвище або ім'я...");
 
             LoadAllMedicalRecords();
 
@@ -62,7 +61,7 @@ namespace Hospital
 
         private void txtSearch_Leave(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSearch.Text) || txtSearch.Text == "Введіть фамілію або ім'я...")
+            if (string.IsNullOrWhiteSpace(txtSearch.Text) || txtSearch.Text == "Введіть прізвище або ім'я...")
             {
                 LoadAllMedicalRecords();
             }
@@ -108,13 +107,12 @@ namespace Hospital
         {
             if (dgvMedicalCards.SelectedRows.Count > 0)
             {
-                // Отримуємо RecordID із вибраного рядка
                 int recordID = Convert.ToInt32(dgvMedicalCards.SelectedRows[0].Cells["ID примітки"].Value);
 
                 try
                 {
                     dbHelper.DeleteMedicalRecord(recordID);
-                    LoadAllMedicalRecords(); // Оновлення таблиці
+                    LoadAllMedicalRecords();
                     MessageBox.Show("Запис успішно видалено.");
                 }
                 catch (Exception ex)
