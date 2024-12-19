@@ -104,6 +104,8 @@
             this.pnlCenter.ResumeLayout(false);
             this.pnlCenter.PerformLayout();
             this.ResumeLayout(false);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLogin_FormClosing);
+
 
         }
 

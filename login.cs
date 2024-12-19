@@ -142,5 +142,17 @@ namespace Hospital
             txtLogin.TabStop = false;
             txtPassword.TabStop = false;
         }
+
+        private void frmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!chkRememberMe.Checked)
+            {
+                Settings.Default.SavedUsername = string.Empty;
+                Settings.Default.SavedPassword = string.Empty;
+                Settings.Default.RememberMe = false;
+                Settings.Default.Save();
+            }
+        }
+
     }
 }

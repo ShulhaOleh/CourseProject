@@ -182,6 +182,7 @@ namespace Hospital
             this.pnlExitContainer.ResumeLayout(false);
             this.pnlExitContainer.PerformLayout();
             this.ResumeLayout(false);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
 
 
 
