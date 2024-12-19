@@ -1,25 +1,44 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
-public static class Prompt
+namespace Hospital
 {
-    public static string ShowDialog(string text, string caption, string defaultValue = "")
+    public partial class Prompt : Form
     {
-        Form prompt = new Form()
-        {
-            Width = 400,
-            Height = 200,
-            FormBorderStyle = FormBorderStyle.FixedDialog,
-            Text = caption,
-            StartPosition = FormStartPosition.CenterScreen
-        };
-        Label lblText = new Label() { Left = 20, Top = 20, Text = text, Width = 350 };
-        TextBox txtInput = new TextBox() { Left = 20, Top = 50, Width = 350, Text = defaultValue };
-        Button btnOK = new Button() { Text = "OK", Left = 150, Width = 100, Top = 100, DialogResult = DialogResult.OK };
-        prompt.Controls.Add(lblText);
-        prompt.Controls.Add(txtInput);
-        prompt.Controls.Add(btnOK);
-        prompt.AcceptButton = btnOK;
 
-        return prompt.ShowDialog() == DialogResult.OK ? txtInput.Text : "";
+        public Prompt()
+        {
+            InitializeComponent();
+        }
+
+        public string HealthStatus
+        {
+            get => textBoxHealthStatus.Text;
+            set => textBoxHealthStatus.Text = value;
+        }
+
+        public string Notes
+        {
+            get => textBoxNotes.Text;
+            set => textBoxNotes.Text = value;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(HealthStatus) || string.IsNullOrWhiteSpace(Notes))
+            {
+                MessageBox.Show("Поля не можуть бути порожніми", "Помилка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
+
     }
 }

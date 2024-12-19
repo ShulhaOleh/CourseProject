@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Hospital
@@ -290,17 +291,72 @@ namespace Hospital
             return ExecuteQuery(query, parameters);
         }
 
-        public void AddMedicalRecord(int patientID, string healthStatus, string notes)
+        public void AddMedicalRecord(int patientID, string healthStatus, string notes, DateTime recordDate)
         {
-            string query = "INSERT INTO MedicalRecords (PatientID, HealthStatus, Notes) VALUES (@PatientID, @HealthStatus, @Notes)";
-            var parameters = new[]
+            try
             {
+                string queryInsertAmbulatoryCard =
+                    "INSERT INTO AmbulatoryCards (PatientID, EntryDate) VALUES (@PatientID, @EntryDate);" +
+                    "SELECT LAST_INSERT_ID();";
+
+                string queryInsertMedicalRecord =
+                    "INSERT INTO MedicalRecords (AmbulatoryCardID, HealthStatus, Notes) " +
+                    "VALUES (@AmbulatoryCardID, @HealthStatus, @Notes);";
+
+                // Додаємо амбулаторну картку
+                var ambulatoryCardID = ExecuteScalar<int>(
+                    queryInsertAmbulatoryCard,
+                    new[]
+                    {
                 CreateParameter("@PatientID", patientID),
+                CreateParameter("@EntryDate", recordDate)
+                    });
+
+                // Додаємо запис медичної картки
+                ExecuteNonQuery(
+                    queryInsertMedicalRecord,
+                    new[]
+                    {
+                CreateParameter("@AmbulatoryCardID", ambulatoryCardID),
                 CreateParameter("@HealthStatus", healthStatus),
                 CreateParameter("@Notes", notes)
-            };
-            ExecuteQuery(query, parameters);
+                    });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Помилка під час додавання запису: {ex.Message}");
+            }
         }
+
+
+        public T ExecuteScalar<T>(string query, params MySqlParameter[] parameters)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    if (parameters != null)
+                    {
+                        command.Parameters.AddRange(parameters);
+                    }
+
+                    connection.Open();
+                    object result = command.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return (T)Convert.ChangeType(result, typeof(T));
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Запит не повернув жодного значення.");
+                    }
+                }
+            }
+        }
+
+
+
+
         public void UpdateMedicalRecord(int recordID, string healthStatus, string notes)
         {
             string query = "UPDATE MedicalRecords SET HealthStatus = @HealthStatus, Notes = @Notes WHERE RecordID = @RecordID";
@@ -315,10 +371,32 @@ namespace Hospital
 
         public void DeleteMedicalRecord(int recordID)
         {
-            string query = "DELETE FROM MedicalRecords WHERE RecordID = @RecordID";
-            var parameters = new[] { CreateParameter("@RecordID", recordID) };
-            ExecuteQuery(query, parameters);
+            try
+            {
+                string queryMedicalRecord =
+                    "DELETE FROM MedicalRecords WHERE RecordID = @RecordID";
+
+                string queryAmbulatoryCard =
+                    "DELETE FROM AmbulatoryCards WHERE AmbulatoryCardID = " +
+                    "(SELECT AmbulatoryCardID FROM MedicalRecords WHERE RecordID = @RecordID)";
+
+                // Видаляємо запис медичної картки
+                ExecuteNonQuery(queryMedicalRecord, new[] { CreateParameter("@RecordID", recordID) });
+
+                // Видаляємо запис амбулаторної картки
+                ExecuteNonQuery(queryAmbulatoryCard, new[] { CreateParameter("@RecordID", recordID) });
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Помилка під час видалення запису: {ex.Message}");
+            }
         }
+
+
+
+
+
+
 
         public DataTable GetMedicalRecords(string search)
         {
@@ -327,8 +405,7 @@ namespace Hospital
             {
                 query += " WHERE HealthStatus LIKE @search OR Notes LIKE @search";
             }
-
-            // Створюємо масив параметрів MySqlParameter[]
+            
             var parameters = new MySqlParameter[]
             {
         new MySqlParameter("@search", $"%{search}%")
@@ -359,7 +436,7 @@ namespace Hospital
             OR m.HealthStatus LIKE @search OR m.Notes LIKE @search";
             var parameters = new MySqlParameter[]
             {
-        new MySqlParameter("@search", $"%{keyword}%")
+                new MySqlParameter("@search", $"%{keyword}%")
             };
             return ExecuteQuery(query, parameters);
         }
@@ -378,7 +455,19 @@ namespace Hospital
             INNER JOIN Patients p ON a.PatientID = p.PatientID";
             return ExecuteQuery(query);
         }
-       
+
+        public List<dynamic> GetPatients()
+        {
+            string query = "SELECT PatientID, CONCAT(LastName, ' ', FirstName) AS FullName FROM Patients";
+            DataTable table = ExecuteQuery(query);
+
+            return table.AsEnumerable()
+                .Select(row => new
+                {
+                    PatientID = row.Field<int>("PatientID"),
+                    FullName = row.Field<string>("FullName")
+                }).ToList<dynamic>();
+        }
 
 
 

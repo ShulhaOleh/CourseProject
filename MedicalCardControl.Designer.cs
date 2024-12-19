@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Hospital
 {
@@ -23,6 +22,7 @@ namespace Hospital
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.dgvMedicalCards = new System.Windows.Forms.DataGridView();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.mainLayout.SuspendLayout();
             this.pnlFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMedicalCards)).BeginInit();
@@ -58,6 +58,7 @@ namespace Hospital
             // 
             // pnlFilter
             // 
+            this.pnlFilter.Controls.Add(this.btnAdd);
             this.pnlFilter.Controls.Add(this.txtSearch);
             this.pnlFilter.Controls.Add(this.btnEdit);
             this.pnlFilter.Controls.Add(this.btnDelete);
@@ -76,13 +77,14 @@ namespace Hospital
             this.txtSearch.Size = new System.Drawing.Size(300, 30);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_Leave);
             // 
             // btnEdit
             // 
             this.btnEdit.Font = new System.Drawing.Font("Arial", 10F);
             this.btnEdit.Location = new System.Drawing.Point(316, 25);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(100, 23);
+            this.btnEdit.Size = new System.Drawing.Size(100, 25);
             this.btnEdit.TabIndex = 2;
             this.btnEdit.Text = "Редагувати";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -90,7 +92,7 @@ namespace Hospital
             // btnDelete
             // 
             this.btnDelete.Font = new System.Drawing.Font("Arial", 10F);
-            this.btnDelete.Location = new System.Drawing.Point(436, 25);
+            this.btnDelete.Location = new System.Drawing.Point(422, 25);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(100, 23);
             this.btnDelete.TabIndex = 3;
@@ -108,6 +110,16 @@ namespace Hospital
             this.dgvMedicalCards.Size = new System.Drawing.Size(794, 464);
             this.dgvMedicalCards.TabIndex = 2;
             // 
+            // btnAdd
+            // 
+            this.btnAdd.Font = new System.Drawing.Font("Arial", 10F);
+            this.btnAdd.Location = new System.Drawing.Point(528, 25);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(100, 22);
+            this.btnAdd.TabIndex = 4;
+            this.btnAdd.Text = "Додати";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
             // MedicalCardControl
             // 
             this.Controls.Add(this.mainLayout);
@@ -118,7 +130,11 @@ namespace Hospital
             this.pnlFilter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMedicalCards)).EndInit();
             this.ResumeLayout(false);
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+
 
         }
+
+        private Button btnAdd;
     }
 }

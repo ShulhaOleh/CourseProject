@@ -101,6 +101,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMedicalRecordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddMedicalRecordForm.Designer.cs">
+      <DependentUpon>AddMedicalRecordForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppointmentSearchControl.cs.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,8 +147,16 @@
       <DependentUpon>ProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="Prompt.cs" />
+    <Compile Include="Prompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prompt.Designer.cs">
+      <DependentUpon>Prompt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddMedicalRecordForm.resx">
+      <DependentUpon>AddMedicalRecordForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AppointmentSearchControl.cs.resx">
       <DependentUpon>AppointmentSearchControl.cs.cs</DependentUpon>
     </EmbeddedResource>
@@ -157,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PatientSearchControl.resx">
       <DependentUpon>PatientSearchControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prompt.resx">
+      <DependentUpon>Prompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
