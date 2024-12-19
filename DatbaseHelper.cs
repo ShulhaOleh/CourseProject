@@ -303,23 +303,21 @@ namespace Hospital
                     "INSERT INTO MedicalRecords (AmbulatoryCardID, HealthStatus, Notes) " +
                     "VALUES (@AmbulatoryCardID, @HealthStatus, @Notes);";
 
-                // Додаємо амбулаторну картку
                 var ambulatoryCardID = ExecuteScalar<int>(
                     queryInsertAmbulatoryCard,
                     new[]
                     {
-                CreateParameter("@PatientID", patientID),
-                CreateParameter("@EntryDate", recordDate)
+                        CreateParameter("@PatientID", patientID),
+                        CreateParameter("@EntryDate", recordDate)
                     });
 
-                // Додаємо запис медичної картки
                 ExecuteNonQuery(
                     queryInsertMedicalRecord,
                     new[]
                     {
-                CreateParameter("@AmbulatoryCardID", ambulatoryCardID),
-                CreateParameter("@HealthStatus", healthStatus),
-                CreateParameter("@Notes", notes)
+                        CreateParameter("@AmbulatoryCardID", ambulatoryCardID),
+                        CreateParameter("@HealthStatus", healthStatus),
+                        CreateParameter("@Notes", notes)
                     });
             }
             catch (Exception ex)
@@ -366,6 +364,7 @@ namespace Hospital
                 CreateParameter("@Notes", notes),
                 CreateParameter("@RecordID", recordID)
             };
+
             ExecuteQuery(query, parameters);
         }
 
@@ -380,10 +379,8 @@ namespace Hospital
                     "DELETE FROM AmbulatoryCards WHERE AmbulatoryCardID = " +
                     "(SELECT AmbulatoryCardID FROM MedicalRecords WHERE RecordID = @RecordID)";
 
-                // Видаляємо запис медичної картки
                 ExecuteNonQuery(queryMedicalRecord, new[] { CreateParameter("@RecordID", recordID) });
 
-                // Видаляємо запис амбулаторної картки
                 ExecuteNonQuery(queryAmbulatoryCard, new[] { CreateParameter("@RecordID", recordID) });
             }
             catch (Exception ex)

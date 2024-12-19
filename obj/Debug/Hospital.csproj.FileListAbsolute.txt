@@ -47,3 +47,4 @@ C:\Users\Oleg\Desktop\Hospital\Hospital\obj\Debug\Hospital.AppointmentSearchCont
 C:\Users\Oleg\Desktop\Hospital\Hospital\obj\Debug\Hospital.MedicalCardControl.resources
 C:\Users\Oleg\Desktop\Hospital\Hospital\obj\Debug\Hospital.AddMedicalRecordForm.resources
 C:\Users\Oleg\Desktop\Hospital\Hospital\obj\Debug\Hospital.Prompt.resources
+C:\Users\Oleg\Desktop\Hospital\Hospital\obj\Debug\Hospital.ProfileControl.resources

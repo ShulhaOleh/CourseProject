@@ -172,6 +172,9 @@
     <EmbeddedResource Include="PatientSearchControl.resx">
       <DependentUpon>PatientSearchControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProfileControl.resx">
+      <DependentUpon>ProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Prompt.resx">
       <DependentUpon>Prompt.cs</DependentUpon>
     </EmbeddedResource>
